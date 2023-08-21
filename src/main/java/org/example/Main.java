@@ -18,9 +18,9 @@ public class Main {
         Board board = new Board(values);
         board.setUpMines(mines);
         board.setUpValues();
-        board.findStart();
         board.displayBoard();
         board.GUIBoard();
+        board.initiateFirstMouse();
     }
 
     public static void openMainMenu() {

@@ -17,6 +17,7 @@ public class Board {
     private int safeSquares;
     private int numberOfMines;
     private  boolean win;
+    private boolean firstmove = true;
     private int length;
     private int width;
     private boolean gameOver;
@@ -26,6 +27,7 @@ public class Board {
     private JFrame frame = new JFrame();
     private JPanel jp;
     private Font font;
+    private MouseAdapter firstMouse;
     private MouseAdapter mouse;
 
     public Board(int size) {
@@ -42,9 +44,7 @@ public class Board {
 
     public void GUIBoard() {
         this.frame = new JFrame();
-        System.out.println(this.frame);
         this.frame.setBounds(10, 10, (width*64)+20, (width*64)+45);
-        System.out.println(this.frame);
         this.font = new Font("TimesRoman", Font.PLAIN, 50);
         jp = new JPanel() {
 
@@ -89,47 +89,7 @@ public class Board {
             }
         };
 
-        mouse = new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                int x = e.getX() / 64; // Calculate the clicked cell's column index
-                int y = e.getY() / 64; // Calculate the clicked cell's row index
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                    board[y][x].exposeCell();
-                    if (board[y][x].getMine()) {
-                        win=false;
-                        endGame();
-                    }
-                } else if (e.getButton() == MouseEvent.BUTTON3) {
-                    if (board[y][x].getFlagged()) {
-                        flagged.remove(board[y][x]);
-                        board[y][x].setFlagged(false);
-                    }
-                    else
-                        if (flagged.size() < numberOfMines) {
-                            flagged.add(board[y][x]);
-                            board[y][x].setFlagged(true);
-                        }
 
-                }
-                frame.repaint();
-
-                arr.add(board[y][x]);
-                System.out.println(arr.size());
-                if (arr.size()==safeSquares) {
-                    System.out.println("john");
-                    win=true;
-                    endGame();
-                } else if (flagged.size()==numberOfMines) {
-                    if(checkFlagged()) {
-                        win=true;
-                        endGame();
-                    }
-                }
-
-            }
-        };
-
-        jp.addMouseListener(mouse);
         this.frame.add(jp);
         this.frame.setVisible(true);
         this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -165,6 +125,120 @@ public class Board {
             }
             System.out.println();
         }
+    }
+
+    public void initiateFirstMouse() {
+
+        this.firstMouse = new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int x = e.getX() / 64; // Calculate the clicked cell's column index
+                int y = e.getY() / 64; // Calculate the clicked cell's row index
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    board[y][x].exposeCell();
+                    if (board[y][x].getMine()) {
+                        win=false;
+                        endGame();
+                    }
+                    findStart(board[y][x]);
+                    arr.add(board[y][x]);
+                    if (arr.size()==safeSquares) {
+                        System.out.println("john");
+                        win=true;
+                        endGame();
+                    }
+                    regularMouse();
+                } else if (e.getButton() == MouseEvent.BUTTON3) {
+                    System.out.println(arr.size());
+                    if (!arr.contains(board[y][x])) {
+                        System.out.println(flagged.size());
+                        if (flagged.size() < numberOfMines) {
+                            System.out.println(board[y][x].getFlagged());
+                            if (!board[y][x].getFlagged()) {
+                                flagged.add(board[y][x]);
+                                board[y][x].setFlagged(true);
+                            }
+                            else {
+                                flagged.remove(board[y][x]);
+                                board[y][x].setFlagged(false);
+                            }
+                        }
+                        else {
+                            flagged.remove(board[y][x]);
+                            board[y][x].setFlagged(false);
+                        }
+                    }
+                    if (flagged.size()==numberOfMines) {
+                        if(checkFlagged()) {
+                            win=true;
+                            endGame();
+                        }
+                    }
+                }
+                frame.repaint();
+
+
+                System.out.println(arr.size());
+
+
+            }
+        };
+
+        this.jp.addMouseListener(this.firstMouse);
+    }
+
+    private void regularMouse() {
+        this.jp.removeMouseListener(firstMouse);
+        mouse = new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int x = e.getX() / 64; // Calculate the clicked cell's column index
+                int y = e.getY() / 64; // Calculate the clicked cell's row index
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    board[y][x].exposeCell();
+                    if (board[y][x].getMine()) {
+                        win=false;
+                        endGame();
+                    }
+                    arr.add(board[y][x]);
+                } else if (e.getButton() == MouseEvent.BUTTON3) {
+                    System.out.println(arr.size());
+                    if (!arr.contains(board[y][x])) {
+                        System.out.println(flagged.size());
+                        if (flagged.size() < numberOfMines) {
+                            System.out.println(board[y][x].getFlagged());
+                            if (!board[y][x].getFlagged()) {
+                                flagged.add(board[y][x]);
+                                board[y][x].setFlagged(true);
+                            }
+                            else {
+                                flagged.remove(board[y][x]);
+                                board[y][x].setFlagged(false);
+                            }
+                        }
+                        else {
+                            flagged.remove(board[y][x]);
+                            board[y][x].setFlagged(false);
+                        }
+                    }
+                }
+                frame.repaint();
+
+
+                System.out.println(arr.size());
+                if (arr.size()==safeSquares) {
+                    System.out.println("john");
+                    win=true;
+                    endGame();
+                } else if (flagged.size()==numberOfMines) {
+                    if(checkFlagged()) {
+                        win=true;
+                        endGame();
+                    }
+                }
+
+            }
+        };
+
+        this.jp.addMouseListener(mouse);
     }
 
     private void endGame() {
@@ -228,22 +302,7 @@ public class Board {
         }
     }
 
-    public void findStart() {
-        Random rand = new Random();
-        int temp;
-        Block start;
-        boolean findNew;
-        do {
-            findNew=false;
-            temp = rand.nextInt(1,length*width);
-            start = board[temp/length][temp%width];
-            if (start.getValue()>0)
-                findNew=true;
-        }
-        while (findNew);
-        System.out.println(start.getX());
-        System.out.println(start.getY());
-
+    private void findStart(Block start) {
         arr.add(start);
         exposeArea(start);
         start.exposeCell();
@@ -255,14 +314,15 @@ public class Board {
                 try {
                     if (arr.contains(board[i][j]))
                         continue;
-                    if (board[i][j].getValue()>0) {
-                        arr.add(board[i][j]);
-                        board[i][j].exposeCell();
-                    }
-                    else {
-                        arr.add(board[i][j]);
-                        board[i][j].exposeCell();
-                        exposeArea(board[i][j]);
+                    if (board[i][j].getValue()!=99) {
+                        if (board[i][j].getValue() > 0) {
+                            arr.add(board[i][j]);
+                            board[i][j].exposeCell();
+                        } else {
+                            arr.add(board[i][j]);
+                            board[i][j].exposeCell();
+                            exposeArea(board[i][j]);
+                        }
                     }
                 }
                 catch (ArrayIndexOutOfBoundsException e) {
