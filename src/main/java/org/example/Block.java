@@ -7,16 +7,24 @@ public class Block {
 
     protected int value;
     protected boolean visible;
+    protected boolean mine;
+    private boolean flagged;
 
     public int getX() {return this.x;}
     public int getY() {return this.y;}
     public int getValue(){return this.value;}
+    public String getStringValue(){return String.valueOf(this.value);}
     public boolean getVisible() {return this.visible;}
+    public boolean getMine() {return this.mine;}
+
+    public boolean getFlagged() {  return flagged;}
+
     public Block(int x, int y) {
         this.x = x;
         this.y = y;
         this.value = 0;
         this.visible=false;
+        this.mine=false;
     }
 
     public String toString() {
@@ -38,6 +46,12 @@ public class Block {
     public void exposeCell(){
         this.visible = true;
     }
-    
 
+    public void setFlagged(boolean flagged) {
+        this.flagged = flagged;
+    }
+
+    public void hideCell(){
+        this.visible = true;
+    }
 }
