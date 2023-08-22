@@ -101,7 +101,7 @@ public class Board {
 
         for (int i = 0; i < this.length; i++) {
             for (int j = 0; j < this.width; j++) {
-                System.out.print(this.board[i][j]);
+                System.out.print(this.board[i][j].getValue());
             }
             System.out.println();
         }
@@ -240,7 +240,7 @@ public class Board {
         exposeArea(board[x][y]);
     }
 
-    private void exposeArea(Block start) throws ArrayIndexOutOfBoundsException {
+    private void exposeArea(Block start) {
         for (int i = start.getX()-1; i < start.getX()+2; i++) {
             for (int j = start.getY()-1; j < start.getY()+2; j++) {
                 try {
@@ -260,7 +260,7 @@ public class Board {
                     }
                 }
                 catch (ArrayIndexOutOfBoundsException e) {
-                    throw e;
+                    assert true;
                 }
             }
         }
