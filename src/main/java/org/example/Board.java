@@ -105,7 +105,6 @@ public class Board {
         }
 
     }
-
     private boolean checkFlagged() {
         Block iteratedValue;
         flaggedIterator = flagged.iterator();
