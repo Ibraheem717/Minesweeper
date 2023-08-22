@@ -244,7 +244,6 @@ public class Board {
         exposeArea(board[x][y]);
     }
 
-    // Reveals 0 -- reveal adjacent (up, down, left right) tiles until u hit a number
     private void exposeArea(Block start) throws ArrayIndexOutOfBoundsException {
         for (int i = start.getX()-1; i < start.getX()+2; i++) {
             for (int j = start.getY()-1; j < start.getY()+2; j++) {
