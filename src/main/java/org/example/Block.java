@@ -51,7 +51,4 @@ public class Block {
         this.flagged = flagged;
     }
 
-    public void hideCell(){
-        this.visible = true;
-    }
 }

@@ -1,5 +1,7 @@
 package org.example;
 
+import org.junit.jupiter.api.function.Executable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,6 +31,9 @@ public class Board {
     private Font font;
     private MouseAdapter firstMouse;
     private MouseAdapter mouse;
+
+    public int getNumberOfMines() {return this.numberOfMines;}
+    public Block [][] getBlock() {return this.board;}
 
     public Board(int size) {
 
@@ -118,72 +123,7 @@ public class Board {
         }
         return true;
     }
-
-    public void temp() {
-        for (int i = 0; i < this.length; i++) {
-            for (int j = 0; j < this.width; j++) {
-                System.out.print(this.board[i][j].temp());
-            }
-            System.out.println();
-        }
-    }
-
-    public void initiateFirstMouse() {
-
-        this.firstMouse = new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                int x = e.getX() / 64;
-                int y = e.getY() / 64;
-                if (x<length && y<width) {
-                    if (e.getButton() == MouseEvent.BUTTON1) {
-                        board[y][x].exposeCell();
-                        if (board[y][x].getMine()) {
-                            win = false;
-                            endGame();
-                        }
-                        findStart(board[y][x]);
-                        arr.add(board[y][x]);
-                        if (arr.size() == safeSquares) {
-                            System.out.println("john");
-                            win = true;
-                            endGame();
-                        }
-                        regularMouse();
-                    } else if (e.getButton() == MouseEvent.BUTTON3) {
-                        System.out.println(arr.size());
-                        if (!arr.contains(board[y][x])) {
-                            System.out.println(flagged.size());
-                            if (flagged.size() < numberOfMines) {
-                                System.out.println(board[y][x].getFlagged());
-                                if (!board[y][x].getFlagged()) {
-                                    flagged.add(board[y][x]);
-                                    board[y][x].setFlagged(true);
-                                } else {
-                                    flagged.remove(board[y][x]);
-                                    board[y][x].setFlagged(false);
-                                }
-                            } else {
-                                flagged.remove(board[y][x]);
-                                board[y][x].setFlagged(false);
-                            }
-                        }
-                        if (flagged.size() == numberOfMines) {
-                            if (checkFlagged()) {
-                                win = true;
-                                endGame();
-                            }
-                        }
-                    }
-                    frame.repaint();
-                }
-            }
-        };
-
-        this.jp.addMouseListener(this.firstMouse);
-    }
-
-    private void regularMouse() {
-        this.jp.removeMouseListener(firstMouse);
+    public void regularMouse() {
         mouse = new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 int x = e.getX() / 64;
@@ -196,6 +136,8 @@ public class Board {
                             win = false;
                             endGame();
                         }
+                        if (board[y][x].getValue()==0)
+                            exposeArea(board[y][x]);
                         arr.add(board[y][x]);
                     } else if (e.getButton() == MouseEvent.BUTTON3) {
                         System.out.println(arr.size());
@@ -298,18 +240,18 @@ public class Board {
             }
         }
     }
-
-    private void findStart(Block start) {
-        arr.add(start);
-        exposeArea(start);
-        start.exposeCell();
+    public void testExposeArea(int x, int y) {
+        exposeArea(board[x][y]);
     }
 
-    private void exposeArea(Block start){
+    // Reveals 0 -- reveal adjacent (up, down, left right) tiles until u hit a number
+    private void exposeArea(Block start) throws ArrayIndexOutOfBoundsException {
         for (int i = start.getX()-1; i < start.getX()+2; i++) {
             for (int j = start.getY()-1; j < start.getY()+2; j++) {
                 try {
                     if (arr.contains(board[i][j]))
+                        continue;
+                    if (Math.sqrt(Math.pow(start.getX()-board[i][j].getX(), 2)) +(Math.pow(start.getY()-board[i][j].getY(),2))==2)
                         continue;
                     if (board[i][j].getValue()!=99) {
                         if (board[i][j].getValue() > 0) {
@@ -323,7 +265,7 @@ public class Board {
                     }
                 }
                 catch (ArrayIndexOutOfBoundsException e) {
-                    assert true;
+                    throw e;
                 }
             }
         }

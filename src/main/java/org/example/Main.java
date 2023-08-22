@@ -20,7 +20,7 @@ public class Main {
         board.setUpValues();
         board.displayBoard();
         board.GUIBoard();
-        board.initiateFirstMouse();
+        board.regularMouse();
     }
 
     public static void openMainMenu() {
