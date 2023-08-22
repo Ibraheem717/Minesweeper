@@ -15,7 +15,6 @@ public class Board {
     private int safeSquares;
     private int numberOfMines;
     private  boolean win;
-    private boolean firstmove = true;
     private int length;
     private int width;
     private boolean gameOver;
@@ -25,7 +24,6 @@ public class Board {
     private JFrame frame = new JFrame();
     private JPanel jp;
     private Font font;
-    private MouseAdapter firstMouse;
     private MouseAdapter mouse;
 
     public int getNumberOfMines() {return this.numberOfMines;}
