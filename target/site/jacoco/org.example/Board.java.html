@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Board.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Minesweeper</a> &gt; <a href="index.source.html" class="el_package">org.example</a> &gt; <span class="el_source">Board.java</span></div><h1>Board.java</h1><pre class="source lang-java linenums">package org.example;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.*;
+import static org.example.Main.openMainMenu;
+
+public class Board {
+
+    private Block [][] board;
+    private Mine [] mines;
+    private int safeSquares;
+    private int numberOfMines;
+    private  boolean win;
+    private int length;
+    private int width;
+    private boolean gameOver;
+<span class="fc" id="L21">    private Set&lt;Block&gt; arr = new HashSet&lt;Block&gt;();</span>
+<span class="fc" id="L22">    private Set&lt;Block&gt; flagged = new HashSet&lt;Block&gt;();</span>
+    private Iterator&lt;Block&gt; flaggedIterator;
+<span class="fc" id="L24">    private JFrame frame = new JFrame();</span>
+    private JPanel jp;
+    private Font font;
+    private MouseAdapter mouse;
+
+<span class="fc" id="L29">    public int getNumberOfMines() {return this.numberOfMines;}</span>
+<span class="nc" id="L30">    public Block [][] getBlock() {return this.board;}</span>
+
+<span class="fc" id="L32">    public Board(int size) {</span>
+
+<span class="fc" id="L34">        this.length = size;</span>
+<span class="fc" id="L35">        this.width = size;</span>
+<span class="fc" id="L36">        this.gameOver = false;</span>
+<span class="fc" id="L37">        board = new Block[length][width];</span>
+
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (int i = 0; i &lt; length; i++)</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">            for (int j = 0; j &lt; width; j++)</span>
+<span class="fc" id="L41">                board[i][j] = new Block(i, j);</span>
+<span class="fc" id="L42">    }</span>
+
+    public void GUIBoard() {
+<span class="nc" id="L45">        this.frame = new JFrame();</span>
+<span class="nc" id="L46">        this.frame.setBounds(10, 10, (width*64)+20, (width*64)+45);</span>
+<span class="nc" id="L47">        this.font = new Font(&quot;TimesRoman&quot;, Font.PLAIN, 50);</span>
+<span class="nc" id="L48">        jp = new JPanel() {</span>
+
+            public void paint(Graphics g) {
+<span class="nc" id="L51">                int transparancy = 250;</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">                for (int i = 0; i &lt; length; i++){</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">                    for (int j = 0; j &lt; length; j++) {</span>
+<span class="nc" id="L54">                        g.setFont(font);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                        if (gameOver)</span>
+<span class="nc" id="L56">                            transparancy = 50;</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">                        if (board[i][j].getVisible()) {</span>
+<span class="nc bnc" id="L58" title="All 5 branches missed.">                            switch (board[i][j].getValue()) {</span>
+<span class="nc" id="L59">                                case (1) -&gt; g.setColor(new Color(0,255,0, transparancy));</span>
+<span class="nc" id="L60">                                case (2) -&gt; g.setColor(new Color(255, 165, 0, transparancy));</span>
+<span class="nc" id="L61">                                case (3) -&gt; g.setColor(new Color(255, 0, 0, transparancy));</span>
+<span class="nc" id="L62">                                case (4) -&gt; g.setColor(new Color(	128, 0, 128, transparancy));</span>
+<span class="nc" id="L63">                                default -&gt; g.setColor(new Color(0,0,0, transparancy));</span>
+                            }
+<span class="nc" id="L65">                            g.drawString(board[i][j].getStringValue(), (j * 64 + 20), ((i + 1) * 64 - 15));</span>
+                        }
+                        else {
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                            if (board[i][j].getFlagged()) {</span>
+<span class="nc" id="L69">                                g.setColor(Color.red);</span>
+<span class="nc" id="L70">                                g.fillRect(j*64, i*64, 64, 64);</span>
+                            }
+
+                        }
+<span class="nc" id="L74">                        g.setColor(Color.BLACK);</span>
+<span class="nc" id="L75">                        g.drawRect(j*64, i*64, 64, 64);</span>
+
+                    }
+                }
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                if (gameOver) {</span>
+<span class="nc" id="L80">                    Font gameOverFont = new Font(&quot;Arial&quot;, Font.BOLD, length*5);</span>
+<span class="nc" id="L81">                    g.setFont(gameOverFont);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">                    String gameOverMessage = (win ? &quot;You Win&quot; : &quot;You Lose&quot;);</span>
+<span class="nc" id="L83">                    String returnMessage = &quot;Click anywhere on the board to return&quot;;</span>
+<span class="nc" id="L84">                    int gameMessageWidth = getWidth()/2 - (g.getFontMetrics().stringWidth(gameOverMessage)/2);</span>
+<span class="nc" id="L85">                    int gameMessageHeight = getWidth()/2 - (g.getFontMetrics().getHeight()/2);</span>
+<span class="nc" id="L86">                    g.drawString(gameOverMessage, gameMessageWidth, gameMessageHeight);</span>
+<span class="nc" id="L87">                    g.drawString(returnMessage, getWidth()/2 - (g.getFontMetrics().stringWidth(returnMessage)/2), gameMessageHeight+g.getFontMetrics().getHeight());</span>
+                }
+<span class="nc" id="L89">            }</span>
+        };
+
+
+<span class="nc" id="L93">        this.frame.add(jp);</span>
+<span class="nc" id="L94">        this.frame.setVisible(true);</span>
+<span class="nc" id="L95">        this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L96">    }</span>
+
+    public void displayBoard() {
+
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        for (int i = 0; i &lt; this.length; i++) {</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">            for (int j = 0; j &lt; this.width; j++) {</span>
+<span class="nc" id="L102">                System.out.print(this.board[i][j].getValue());</span>
+            }
+<span class="nc" id="L104">            System.out.println();</span>
+        }
+
+<span class="nc" id="L107">    }</span>
+
+    private boolean checkFlagged() {
+        Block iteratedValue;
+<span class="nc" id="L111">        flaggedIterator = flagged.iterator();</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        while (flaggedIterator.hasNext()) {</span>
+<span class="nc" id="L113">            iteratedValue = flaggedIterator.next();</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">            if (iteratedValue.getValue()!=99) {</span>
+<span class="nc" id="L115">                return false;</span>
+            }
+        }
+<span class="nc" id="L118">        return true;</span>
+    }
+    public void regularMouse() {
+<span class="nc" id="L121">        mouse = new MouseAdapter() {</span>
+            public void mouseClicked(MouseEvent e) {
+<span class="nc" id="L123">                int x = e.getX() / 64;</span>
+<span class="nc" id="L124">                int y = e.getY() / 64;</span>
+
+<span class="nc bnc" id="L126" title="All 4 branches missed.">                if (x&lt;length &amp;&amp; y&lt;width) {</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">                    if (e.getButton() == MouseEvent.BUTTON1) {</span>
+<span class="nc" id="L128">                        board[y][x].exposeCell();</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                        if (board[y][x].getMine()) {</span>
+<span class="nc" id="L130">                            win = false;</span>
+<span class="nc" id="L131">                            endGame();</span>
+                        }
+<span class="nc bnc" id="L133" title="All 2 branches missed.">                        if (board[y][x].getValue()==0)</span>
+<span class="nc" id="L134">                            exposeArea(board[y][x]);</span>
+<span class="nc" id="L135">                        arr.add(board[y][x]);</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">                    } else if (e.getButton() == MouseEvent.BUTTON3) {</span>
+<span class="nc" id="L137">                        System.out.println(arr.size());</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">                        if (!arr.contains(board[y][x])) {</span>
+<span class="nc" id="L139">                            System.out.println(flagged.size());</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">                            if (flagged.size() &lt; numberOfMines) {</span>
+<span class="nc" id="L141">                                System.out.println(board[y][x].getFlagged());</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">                                if (!board[y][x].getFlagged()) {</span>
+<span class="nc" id="L143">                                    flagged.add(board[y][x]);</span>
+<span class="nc" id="L144">                                    board[y][x].setFlagged(true);</span>
+                                } else {
+<span class="nc" id="L146">                                    flagged.remove(board[y][x]);</span>
+<span class="nc" id="L147">                                    board[y][x].setFlagged(false);</span>
+                                }
+                            } else {
+<span class="nc" id="L150">                                flagged.remove(board[y][x]);</span>
+<span class="nc" id="L151">                                board[y][x].setFlagged(false);</span>
+                            }
+                        }
+                    }
+<span class="nc" id="L155">                    frame.repaint();</span>
+
+
+<span class="nc" id="L158">                    System.out.println(arr.size());</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">                    if (arr.size() == safeSquares) {</span>
+<span class="nc" id="L160">                        System.out.println(&quot;john&quot;);</span>
+<span class="nc" id="L161">                        win = true;</span>
+<span class="nc" id="L162">                        endGame();</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">                    } else if (flagged.size() == numberOfMines) {</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">                        if (checkFlagged()) {</span>
+<span class="nc" id="L165">                            win = true;</span>
+<span class="nc" id="L166">                            endGame();</span>
+                        }
+                    }
+                }
+
+<span class="nc" id="L171">            }</span>
+        };
+
+<span class="nc" id="L174">        this.jp.addMouseListener(mouse);</span>
+<span class="nc" id="L175">    }</span>
+
+    private void endGame() {
+<span class="nc" id="L178">        arr.clear();</span>
+<span class="nc" id="L179">        this.gameOver = true;</span>
+<span class="nc" id="L180">        this.font = new Font(&quot;TimesRoman&quot;, Font.PLAIN, 50);</span>
+<span class="nc" id="L181">        System.out.println(&quot;gg&quot;);</span>
+<span class="nc" id="L182">        jp.removeMouseListener(mouse);</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        for (int i = 0; i &lt; length; i++) {</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">            for (int j = 0; j &lt; width; j++) {</span>
+<span class="nc" id="L185">                board[i][j].exposeCell();</span>
+            }
+        }
+<span class="nc" id="L188">        jp.repaint();</span>
+
+<span class="nc" id="L190">        JButton returnButton = new JButton();</span>
+<span class="nc" id="L191">        returnButton.setBounds(0,0,(width*64)+20, (width*64)+45);</span>
+<span class="nc" id="L192">        returnButton.setOpaque(false);</span>
+<span class="nc" id="L193">        returnButton.addActionListener(new ActionListener() {</span>
+            public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L195">                frame.dispose();</span>
+<span class="nc" id="L196">                openMainMenu();</span>
+<span class="nc" id="L197">            }</span>
+        });
+<span class="nc" id="L199">        this.jp.add(returnButton);</span>
+<span class="nc" id="L200">    }</span>
+
+    public void setUpMines(int numberOfMines) {
+<span class="fc" id="L203">        Random rand = new Random();</span>
+<span class="fc" id="L204">        this.numberOfMines = numberOfMines;</span>
+<span class="fc" id="L205">        this.safeSquares = (this.length *  this.width) - numberOfMines;</span>
+<span class="fc" id="L206">        mines = new Mine[numberOfMines];</span>
+<span class="fc" id="L207">        ArrayList&lt;Integer&gt; numberlist = new ArrayList&lt;Integer&gt;();</span>
+        int temp;
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        for (int i = 0; i &lt; numberOfMines; i++) {</span>
+            do {
+<span class="fc" id="L211">                temp = rand.nextInt(1, length * length);</span>
+            }
+<span class="fc bfc" id="L213" title="All 2 branches covered.">            while (numberlist.contains(temp));</span>
+<span class="fc" id="L214">            numberlist.add(temp);</span>
+<span class="fc" id="L215">            mines[i] = new Mine(temp/length, temp%width);</span>
+<span class="fc" id="L216">            board[mines[i].getX()][mines[i].getY()] = mines[i];</span>
+        }
+<span class="fc" id="L218">    }</span>
+
+    public void setUpValues() {
+<span class="nc bnc" id="L221" title="All 2 branches missed.">        for (Mine mine : mines) {</span>
+<span class="nc" id="L222">            mine.check();</span>
+        }
+<span class="nc bnc" id="L224" title="All 2 branches missed.">        for (Mine mine : mines) {</span>
+<span class="nc bnc" id="L225" title="All 2 branches missed.">            for (int i = mine.getX()-1; i &lt; mine.getX()+2; i++) {</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">                for (int j = mine.getY()-1; j &lt; mine.getY()+2; j++) {</span>
+                    try {
+<span class="nc" id="L228">                        board[i][j].increaseValue();</span>
+                    }
+<span class="nc" id="L230">                    catch (ArrayIndexOutOfBoundsException e) {</span>
+                        assert true;
+<span class="nc" id="L232">                    }</span>
+                }
+            }
+        }
+<span class="nc" id="L236">    }</span>
+    public void testExposeArea(int x, int y) {
+<span class="nc" id="L238">        exposeArea(board[x][y]);</span>
+<span class="nc" id="L239">    }</span>
+
+    private void exposeArea(Block start) {
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        for (int i = start.getX()-1; i &lt; start.getX()+2; i++) {</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">            for (int j = start.getY()-1; j &lt; start.getY()+2; j++) {</span>
+                try {
+<span class="nc bnc" id="L245" title="All 2 branches missed.">                    if (arr.contains(board[i][j]))</span>
+<span class="nc" id="L246">                        continue;</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">                    if (Math.sqrt(Math.pow(start.getX()-board[i][j].getX(), 2)) +(Math.pow(start.getY()-board[i][j].getY(),2))==2)</span>
+<span class="nc" id="L248">                        continue;</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">                    if (board[i][j].getValue()!=99) {</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">                        if (board[i][j].getValue() &gt; 0) {</span>
+<span class="nc" id="L251">                            arr.add(board[i][j]);</span>
+<span class="nc" id="L252">                            board[i][j].exposeCell();</span>
+                        } else {
+<span class="nc" id="L254">                            arr.add(board[i][j]);</span>
+<span class="nc" id="L255">                            board[i][j].exposeCell();</span>
+<span class="nc" id="L256">                            exposeArea(board[i][j]);</span>
+                        }
+                    }
+                }
+<span class="nc" id="L260">                catch (ArrayIndexOutOfBoundsException e) {</span>
+                    assert true;
+<span class="nc" id="L262">                }</span>
+            }
+        }
+<span class="nc" id="L265">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
