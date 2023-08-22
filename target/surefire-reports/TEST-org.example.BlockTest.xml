@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.example.BlockTest" time="0.043" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.example.BlockTest" time="0.037" tests="2" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="GB"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-17\bin"/>
-    <property name="sun.java.command" value="C:\Users\Ibraheem\AppData\Local\Temp\surefire9999269022790171948\surefirebooter-20230822163554552_3.jar C:\Users\Ibraheem\AppData\Local\Temp\surefire9999269022790171948 2023-08-22T16-35-54_410-jvmRun1 surefire-20230822163554552_1tmp surefire_0-20230822163554552_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\Ibraheem\AppData\Local\Temp\surefire16666276724785212791\surefirebooter-20230822170441730_3.jar C:\Users\Ibraheem\AppData\Local\Temp\surefire16666276724785212791 2023-08-22T17-04-41_586-jvmRun1 surefire-20230822170441730_1tmp surefire_0-20230822170441730_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\Ibraheem\IdeaProjects\Minesweeper\target\test-classes;C:\Users\Ibraheem\IdeaProjects\Minesweeper\target\classes;C:\Users\Ibraheem\.m2\repository\org\jacoco\jacoco-maven-plugin\0.8.8\jacoco-maven-plugin-0.8.8.jar;C:\Users\Ibraheem\.m2\repository\org\codehaus\plexus\plexus-utils\3.0.22\plexus-utils-3.0.22.jar;C:\Users\Ibraheem\.m2\repository\org\apache\maven\shared\file-management\1.2.1\file-management-1.2.1.jar;C:\Users\Ibraheem\.m2\repository\org\apache\maven\maven-plugin-api\2.0.6\maven-plugin-api-2.0.6.jar;C:\Users\Ibraheem\.m2\repository\org\apache\maven\shared\maven-shared-io\1.1\maven-shared-io-1.1.jar;C:\Users\Ibraheem\.m2\repository\org\apache\maven\maven-artifact\2.0.2\maven-artifact-2.0.2.jar;C:\Users\Ibraheem\.m2\repository\org\apache\maven\maven-artifact-manager\2.0.2\maven-artifact-manager-2.0.2.jar;C:\Users\Ibraheem\.m2\repository\org\apache\maven\maven-repository-metadata\2.0.2\maven-repository-metadata-2.0.2.jar;C:\Users\Ibraheem\.m2\repository\org\apache\maven\wagon\wagon-provider-api\1.0-alpha-6\wagon-provider-api-1.0-alpha-6.jar;C:\Users\Ibraheem\.m2\repository\org\codehaus\plexus\plexus-container-default\1.0-alpha-9\plexus-container-default-1.0-alpha-9.jar;C:\Users\Ibraheem\.m2\repository\junit\junit\3.8.1\junit-3.8.1.jar;C:\Users\Ibraheem\.m2\repository\classworlds\classworlds\1.1-alpha-2\classworlds-1.1-alpha-2.jar;C:\Users\Ibraheem\.m2\repository\org\apache\maven\reporting\maven-reporting-api\3.0\maven-reporting-api-3.0.jar;C:\Users\Ibraheem\.m2\repository\org\apache\maven\doxia\doxia-sink-api\1.0\doxia-sink-api-1.0.jar;C:\Users\Ibraheem\.m2\repository\org\jacoco\org.jacoco.agent\0.8.8\org.jacoco.agent-0.8.8-runtime.jar;C:\Users\Ibraheem\.m2\repository\org\jacoco\org.jacoco.core\0.8.8\org.jacoco.core-0.8.8.jar;C:\Users\Ibraheem\.m2\repository\org\ow2\asm\asm\9.2\asm-9.2.jar;C:\Users\Ibraheem\.m2\repository\org\ow2\asm\asm-commons\9.2\asm-commons-9.2.jar;C:\Users\Ibraheem\.m2\repository\org\ow2\asm\asm-analysis\9.2\asm-analysis-9.2.jar;C:\Users\Ibraheem\.m2\repository\org\ow2\asm\asm-tree\9.2\asm-tree-9.2.jar;C:\Users\Ibraheem\.m2\repository\org\jacoco\org.jacoco.report\0.8.8\org.jacoco.report-0.8.8.jar;C:\Users\Ibraheem\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.2.0\junit-jupiter-api-5.2.0.jar;C:\Users\Ibraheem\.m2\repository\org\apiguardian\apiguardian-api\1.0.0\apiguardian-api-1.0.0.jar;C:\Users\Ibraheem\.m2\repository\org\opentest4j\opentest4j\1.1.0\opentest4j-1.1.0.jar;C:\Users\Ibraheem\.m2\repository\org\junit\platform\junit-platform-commons\1.2.0\junit-platform-commons-1.2.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\Ibraheem\AppData\Local\Temp\surefire9999269022790171948\surefirebooter-20230822163554552_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\Ibraheem\AppData\Local\Temp\surefire16666276724785212791\surefirebooter-20230822170441730_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.8+9-LTS-211"/>
@@ -56,8 +56,8 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testToString" classname="org.example.BlockTest" time="0.03">
-    <system-err><![CDATA[Aug 22, 2023 4:35:55 PM org.junit.platform.launcher.core.DefaultLauncher handleThrowable
+  <testcase name="testToString" classname="org.example.BlockTest" time="0.027">
+    <system-err><![CDATA[Aug 22, 2023 5:04:42 PM org.junit.platform.launcher.core.DefaultLauncher handleThrowable
 WARNING: TestEngine with ID 'junit-vintage' failed to discover tests
 java.lang.NoClassDefFoundError: org/junit/runners/model/RunnerBuilder
 	at org.junit.vintage.engine.discovery.VintageDiscoverer.<init>(VintageDiscoverer.java:35)
@@ -80,7 +80,7 @@ Caused by: java.lang.ClassNotFoundException: org.junit.runners.model.RunnerBuild
 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:520)
 	... 14 more
 
-Aug 22, 2023 4:35:55 PM org.junit.platform.launcher.core.DefaultLauncher handleThrowable
+Aug 22, 2023 5:04:42 PM org.junit.platform.launcher.core.DefaultLauncher handleThrowable
 WARNING: TestEngine with ID 'junit-vintage' failed to discover tests
 java.lang.NoClassDefFoundError: org/junit/runners/model/RunnerBuilder
 	at org.junit.vintage.engine.discovery.VintageDiscoverer.<init>(VintageDiscoverer.java:35)
@@ -103,7 +103,7 @@ Caused by: java.lang.ClassNotFoundException: org.junit.runners.model.RunnerBuild
 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:520)
 	... 14 more
 
-Aug 22, 2023 4:35:55 PM org.junit.platform.launcher.core.DefaultLauncher handleThrowable
+Aug 22, 2023 5:04:42 PM org.junit.platform.launcher.core.DefaultLauncher handleThrowable
 WARNING: TestEngine with ID 'junit-vintage' failed to discover tests
 java.lang.NoClassDefFoundError: org/junit/runners/model/RunnerBuilder
 	at org.junit.vintage.engine.discovery.VintageDiscoverer.<init>(VintageDiscoverer.java:35)
@@ -126,7 +126,7 @@ Caused by: java.lang.ClassNotFoundException: org.junit.runners.model.RunnerBuild
 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:520)
 	... 14 more
 
-Aug 22, 2023 4:35:55 PM org.junit.platform.launcher.core.DefaultLauncher handleThrowable
+Aug 22, 2023 5:04:42 PM org.junit.platform.launcher.core.DefaultLauncher handleThrowable
 WARNING: TestEngine with ID 'junit-vintage' failed to discover tests
 java.lang.NoClassDefFoundError: org/junit/runners/model/RunnerBuilder
 	at org.junit.vintage.engine.discovery.VintageDiscoverer.<init>(VintageDiscoverer.java:35)
@@ -150,5 +150,5 @@ Caused by: java.lang.ClassNotFoundException: org.junit.runners.model.RunnerBuild
 
 ]]></system-err>
   </testcase>
-  <testcase name="testHideCell" classname="org.example.BlockTest" time="0.002"/>
+  <testcase name="testHideCell" classname="org.example.BlockTest" time="0.001"/>
 </testsuite>
