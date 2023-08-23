@@ -127,49 +127,61 @@ public class Board {
     }
     public void regularMouse() {
         mouse = new MouseAdapter() {
+
+            private boolean checkWin() {
+                if (arr.size() == safeSquares)
+                    return true;
+                return flagged.size() == numberOfMines && checkFlagged();
+            }
+
+            private void revealTile(int x, int y) {
+
+                board[y][x].exposeCell();
+                if (board[y][x].getMine()) {
+                    win = false;
+                    endGame();
+                }
+                if (board[y][x].getValue()==0)
+                    exposeArea(board[y][x]);
+                arr.add(board[y][x]);
+            }
+
+            private void flagTile(int x, int y) {
+                if (!arr.contains(board[y][x])) {
+                    if (flagged.size() < numberOfMines) {
+                        if (!board[y][x].getFlagged()) {
+                            flagged.add(board[y][x]);
+                            board[y][x].setFlagged(true);
+                        } else {
+                            flagged.remove(board[y][x]);
+                            board[y][x].setFlagged(false);
+                        }
+                    } else {
+                        flagged.remove(board[y][x]);
+                        board[y][x].setFlagged(false);
+                    }
+                }
+            }
+
+            private void decidePressed(MouseEvent e) {
+                switch (e.getButton()) {
+                    case MouseEvent.BUTTON1 -> revealTile(e.getX()/64, e.getY()/64);
+                    case MouseEvent.BUTTON3 -> flagTile(e.getX()/64, e.getY()/64);
+                }
+            }
             @Override
             public void mouseClicked(MouseEvent e) {
                 int x = e.getX() / 64;
                 int y = e.getY() / 64;
 
                 if (x<length && y<width) {
-                    if (e.getButton() == MouseEvent.BUTTON1) {
-                        board[y][x].exposeCell();
-                        if (board[y][x].getMine()) {
-                            win = false;
-                            endGame();
-                        }
-                        if (board[y][x].getValue()==0)
-                            exposeArea(board[y][x]);
-                        arr.add(board[y][x]);
-                    } else if (e.getButton() == MouseEvent.BUTTON3) {
-                        if (!arr.contains(board[y][x])) {
-                            if (flagged.size() < numberOfMines) {
-                                if (!board[y][x].getFlagged()) {
-                                    flagged.add(board[y][x]);
-                                    board[y][x].setFlagged(true);
-                                } else {
-                                    flagged.remove(board[y][x]);
-                                    board[y][x].setFlagged(false);
-                                }
-                            } else {
-                                flagged.remove(board[y][x]);
-                                board[y][x].setFlagged(false);
-                            }
-                        }
-                    }
+                    decidePressed(e);
                     frame.repaint();
+                }
 
-
-                    if (arr.size() == safeSquares) {
-                        win = true;
-                        endGame();
-                    } else if (flagged.size() == numberOfMines) {
-                        if (checkFlagged()) {
-                            win = true;
-                            endGame();
-                        }
-                    }
+                if (checkWin()) {
+                    win = true;
+                    endGame();
                 }
 
             }
