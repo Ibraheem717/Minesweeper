@@ -47,48 +47,56 @@ public class Board {
         this.font = new Font("TimesRoman", Font.PLAIN, 50);
         jp = new JPanel() {
 
+            private void decideFlagged(Graphics g, boolean flag, int i, int j) {
+                if (flag) {
+                    g.setColor(Color.red);
+                    g.fillRect(j*64, i*64, 64, 64);
+                }
+            }
+            private void decideColour(Graphics g, int transparancy, int value) {
+                switch (value) {
+                    case (1) -> g.setColor(new Color(0,255,0, transparancy));
+                    case (2) -> g.setColor(new Color(255, 165, 0, transparancy));
+                    case (3) -> g.setColor(new Color(255, 0, 0, transparancy));
+                    case (4) -> g.setColor(new Color(	128, 0, 128, transparancy));
+                    default -> g.setColor(new Color(0,0,0, transparancy));
+                }
+            }
+
             private void drawTiles(Graphics g, int transparancy, int i, int j) {
                 if (board[i][j].getVisible()) {
-                    switch (board[i][j].getValue()) {
-                        case (1) -> g.setColor(new Color(0,255,0, transparancy));
-                        case (2) -> g.setColor(new Color(255, 165, 0, transparancy));
-                        case (3) -> g.setColor(new Color(255, 0, 0, transparancy));
-                        case (4) -> g.setColor(new Color(	128, 0, 128, transparancy));
-                        default -> g.setColor(new Color(0,0,0, transparancy));
-                    }
+                    decideColour(g, transparancy, board[i][j].getValue());
                     g.drawString(board[i][j].getStringValue(), (j * 64 + 20), ((i + 1) * 64 - 15));
                 }
                 else {
-                    if (board[i][j].getFlagged()) {
-                        g.setColor(Color.red);
-                        g.fillRect(j*64, i*64, 64, 64);
-                    }
-
+                    decideFlagged(g, board[i][j].getFlagged(), i, j);
                 }
                 g.setColor(Color.BLACK);
                 g.drawRect(j*64, i*64, 64, 64);
             }
+
+            private void gameOverMessage(Graphics g) {
+                Font gameOverFont = new Font("Arial", Font.BOLD, length*5);
+                g.setFont(gameOverFont);
+                String gameOverMessage = (win ? "You Win" : "You Lose");
+                String returnMessage = "Click anywhere on the board to return";
+                int gameMessageWidth = getWidth()/2 - (g.getFontMetrics().stringWidth(gameOverMessage)/2);
+                int gameMessageHeight = getWidth()/2 - (g.getFontMetrics().getHeight()/2);
+                g.drawString(gameOverMessage, gameMessageWidth, gameMessageHeight);
+                g.drawString(returnMessage, getWidth()/2 - (g.getFontMetrics().stringWidth(returnMessage)/2), gameMessageHeight+g.getFontMetrics().getHeight());
+
+            }
             @Override
             public void paint(Graphics g) {
-                int transparancy = 250;
+                int transparancy = (gameOver ? 50 : 250);
                 for (int i = 0; i < length; i++){
                     for (int j = 0; j < length; j++) {
                         g.setFont(font);
-                        if (gameOver)
-                            transparancy = 50;
                         drawTiles(g, transparancy, i, j);
                     }
                 }
-                if (gameOver) {
-                    Font gameOverFont = new Font("Arial", Font.BOLD, length*5);
-                    g.setFont(gameOverFont);
-                    String gameOverMessage = (win ? "You Win" : "You Lose");
-                    String returnMessage = "Click anywhere on the board to return";
-                    int gameMessageWidth = getWidth()/2 - (g.getFontMetrics().stringWidth(gameOverMessage)/2);
-                    int gameMessageHeight = getWidth()/2 - (g.getFontMetrics().getHeight()/2);
-                    g.drawString(gameOverMessage, gameMessageWidth, gameMessageHeight);
-                    g.drawString(returnMessage, getWidth()/2 - (g.getFontMetrics().stringWidth(returnMessage)/2), gameMessageHeight+g.getFontMetrics().getHeight());
-                }
+                if (gameOver)
+                    gameOverMessage(g);
             }
         };
 
