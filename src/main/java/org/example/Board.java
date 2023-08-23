@@ -25,6 +25,7 @@ public class Board {
     private JPanel jp;
     private Font font;
     private MouseAdapter mouse;
+    private Random rand = new Random();;
 
     public int getNumberOfMines() {return this.numberOfMines;}
     public Block [][] getBlock() {return this.board;}
@@ -199,7 +200,6 @@ public class Board {
     }
 
     public void setUpMines(int numberOfMines) {
-        Random rand = new Random();
         this.numberOfMines = numberOfMines;
         this.safeSquares = (this.length *  this.width) - numberOfMines;
         mines = new Mine[numberOfMines];
@@ -207,7 +207,7 @@ public class Board {
         int temp;
         for (int i = 0; i < numberOfMines; i++) {
             do {
-                temp = rand.nextInt(1, length * length);
+                temp = this.rand.nextInt(1, length * length);
             }
             while (numberlist.contains(temp));
             numberlist.add(temp);
@@ -243,7 +243,9 @@ public class Board {
                 try {
                     if (arr.contains(board[i][j]))
                         continue;
-                    if (Math.sqrt(Math.pow(start.getX()-board[i][j].getX(), 2)) +(Math.pow(start.getY()-board[i][j].getY(),2))==2)
+                    if (Math.sqrt(Math.pow((double)start.getX()-board[i][j].getX(), 2)) +
+                            (Math.pow((double)start.getY()-board[i][j].getY(),2))
+                            ==2)
                         continue;
                     if (board[i][j].getValue()!=99) {
                         if (board[i][j].getValue() > 0) {
