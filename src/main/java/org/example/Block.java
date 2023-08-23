@@ -32,9 +32,6 @@ public class Block {
             return "█";
         return ( (this.value>0) ? String.valueOf(this.value) : "▢" );
     }
-    public void check(){
-        System.out.println(x + ", " + y);
-    }
     public String temp() {
         return ( (this.value>0) ? String.valueOf(this.value) : "▢" );
     }

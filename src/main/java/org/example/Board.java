@@ -18,14 +18,13 @@ public class Board {
     private int length;
     private int width;
     private boolean gameOver;
-    private Set<Block> arr = new HashSet<Block>();
-    private Set<Block> flagged = new HashSet<Block>();
-    private Iterator<Block> flaggedIterator;
+    private Set<Block> arr = new HashSet<>();
+    private Set<Block> flagged = new HashSet<>();
     private JFrame frame = new JFrame();
     private JPanel jp;
     private Font font;
     private MouseAdapter mouse;
-    private Random rand = new Random();;
+    private Random rand = new Random();
 
     public int getNumberOfMines() {return this.numberOfMines;}
     public Block [][] getBlock() {return this.board;}
@@ -48,6 +47,28 @@ public class Board {
         this.font = new Font("TimesRoman", Font.PLAIN, 50);
         jp = new JPanel() {
 
+            private void drawTiles(Graphics g, int transparancy, int i, int j) {
+                if (board[i][j].getVisible()) {
+                    switch (board[i][j].getValue()) {
+                        case (1) -> g.setColor(new Color(0,255,0, transparancy));
+                        case (2) -> g.setColor(new Color(255, 165, 0, transparancy));
+                        case (3) -> g.setColor(new Color(255, 0, 0, transparancy));
+                        case (4) -> g.setColor(new Color(	128, 0, 128, transparancy));
+                        default -> g.setColor(new Color(0,0,0, transparancy));
+                    }
+                    g.drawString(board[i][j].getStringValue(), (j * 64 + 20), ((i + 1) * 64 - 15));
+                }
+                else {
+                    if (board[i][j].getFlagged()) {
+                        g.setColor(Color.red);
+                        g.fillRect(j*64, i*64, 64, 64);
+                    }
+
+                }
+                g.setColor(Color.BLACK);
+                g.drawRect(j*64, i*64, 64, 64);
+            }
+            @Override
             public void paint(Graphics g) {
                 int transparancy = 250;
                 for (int i = 0; i < length; i++){
@@ -55,26 +76,7 @@ public class Board {
                         g.setFont(font);
                         if (gameOver)
                             transparancy = 50;
-                        if (board[i][j].getVisible()) {
-                            switch (board[i][j].getValue()) {
-                                case (1) -> g.setColor(new Color(0,255,0, transparancy));
-                                case (2) -> g.setColor(new Color(255, 165, 0, transparancy));
-                                case (3) -> g.setColor(new Color(255, 0, 0, transparancy));
-                                case (4) -> g.setColor(new Color(	128, 0, 128, transparancy));
-                                default -> g.setColor(new Color(0,0,0, transparancy));
-                            }
-                            g.drawString(board[i][j].getStringValue(), (j * 64 + 20), ((i + 1) * 64 - 15));
-                        }
-                        else {
-                            if (board[i][j].getFlagged()) {
-                                g.setColor(Color.red);
-                                g.fillRect(j*64, i*64, 64, 64);
-                            }
-
-                        }
-                        g.setColor(Color.BLACK);
-                        g.drawRect(j*64, i*64, 64, 64);
-
+                        drawTiles(g, transparancy, i, j);
                     }
                 }
                 if (gameOver) {
@@ -108,7 +110,7 @@ public class Board {
     }
     private boolean checkFlagged() {
         Block iteratedValue;
-        flaggedIterator = flagged.iterator();
+        Iterator<Block> flaggedIterator = flagged.iterator();
         while (flaggedIterator.hasNext()) {
             iteratedValue = flaggedIterator.next();
             if (iteratedValue.getValue()!=99) {
