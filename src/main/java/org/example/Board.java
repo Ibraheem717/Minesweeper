@@ -89,11 +89,9 @@ public class Board {
             @Override
             public void paint(Graphics g) {
                 int transparancy = (gameOver ? 50 : 250);
-                for (int i = 0; i < length; i++){
-                    for (int j = 0; j < length; j++) {
-                        g.setFont(font);
-                        drawTiles(g, transparancy, i, j);
-                    }
+                for (int i = 0; i < length*width; i++){
+                    g.setFont(font);
+                    drawTiles(g, transparancy, i/length, i%width);
                 }
                 if (gameOver)
                     gameOverMessage(g);
@@ -129,6 +127,7 @@ public class Board {
     }
     public void regularMouse() {
         mouse = new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 int x = e.getX() / 64;
                 int y = e.getY() / 64;
@@ -144,11 +143,8 @@ public class Board {
                             exposeArea(board[y][x]);
                         arr.add(board[y][x]);
                     } else if (e.getButton() == MouseEvent.BUTTON3) {
-                        System.out.println(arr.size());
                         if (!arr.contains(board[y][x])) {
-                            System.out.println(flagged.size());
                             if (flagged.size() < numberOfMines) {
-                                System.out.println(board[y][x].getFlagged());
                                 if (!board[y][x].getFlagged()) {
                                     flagged.add(board[y][x]);
                                     board[y][x].setFlagged(true);
@@ -165,9 +161,7 @@ public class Board {
                     frame.repaint();
 
 
-                    System.out.println(arr.size());
                     if (arr.size() == safeSquares) {
-                        System.out.println("john");
                         win = true;
                         endGame();
                     } else if (flagged.size() == numberOfMines) {
@@ -188,7 +182,6 @@ public class Board {
         arr.clear();
         this.gameOver = true;
         this.font = new Font("TimesRoman", Font.PLAIN, 50);
-        System.out.println("gg");
         jp.removeMouseListener(mouse);
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < width; j++) {
